@@ -1,7 +1,18 @@
-## Crear un proyecto hibernate
+
+# Índice
+- [Índice](#índice)
+- [ORM](#orm)
+- [Crear un proyecto hibernate](#crear-un-proyecto-hibernate)
+  - [Modificar el nombre de los atributos](#modificar-el-nombre-de-los-atributos)
+  - [Anidar clases](#anidar-clases)
+- [Realizar acciones sobre la base de datos](#realizar-acciones-sobre-la-base-de-datos)
+  - [Crear elementos - Inserciones](#crear-elementos---inserciones)
+
+# ORM
+
+# Crear un proyecto hibernate
 
 1. Configurar las dependecias maven para trabajar con las librerias necesaras
-
 
 ```xml
 <dependency>
@@ -367,3 +378,27 @@ El problema que tiene esto es que intentará mapear en la tabla el campo poblaci
 ```
 
 De esta forma, sobre la misma clase se puede mapear diferentes elementos
+
+# Realizar acciones sobre la base de datos
+
+Como ya se ha explicado en el punto anterior, para poder acceder a la base de datos y trabajar con ello lo primero que se necesita es tener una sesión activa. Para ello se crea un objeto mediante la clase creada
+
+```java
+Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+```
+
+Con dicha sesión podemos empezar a trabajar con la base de datos. Las acciones que se pueden hacer sobre ellas son las CRUD típicas de gestión de base de datos.
+
+## Crear elementos - Inserciones
+
+Para poder hacer inserciones sobre una base de datos, tan solo es necesario utilizar el método persist sobre la sesion activa, indicando el objeto java que se quiere guardar en la base de datos. En ningún momento es necesario indicar una query como tal, ya que el mapeo se encargará de realizar todo el trabajo con los decoradores que se han incorporado dentro de cada una de las clases que se quieren mapear
+
+Como ya se ha visto en puntos anteriores, para poder guardar elementos dentro de la base de datos se utiliza el método persist. Dicho método lo que hace es incorporar los datos en la entidad que se indique en la clase, mapeando los atributos en las columnas indicadas. Es muy importante que antes de cada transaccion se realice la obtencion de la misma (para poder abrir el canal de comunicación) y garantizarla una vez se ha llevado a cabo
+
+```java
+session.beginTransaction();
+session.persist(new Alumno("Nombre","Apellido","correo@correo.com",600000000, new Direccion("C/Prueba de calle","Madrid","Villaviciosa")));
+session.getTransaction().commit();
+```
+
+Como se puede ver, para poder hacer una inserción se puede utilizar el método persist. Funcionaría también el método save. La diferencia entre ámbos es como gestiona las relaciones entre las diferentes tablas si las hubiese. Esto lo veremos más adelante
