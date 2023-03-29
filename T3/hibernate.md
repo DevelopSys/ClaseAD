@@ -7,6 +7,7 @@
   - [Anidar clases](#anidar-clases)
 - [Realizar acciones sobre la base de datos](#realizar-acciones-sobre-la-base-de-datos)
   - [Crear elementos - Inserciones](#crear-elementos---inserciones)
+  - [Crear elementos - Selecciones](#crear-elementos---selecciones)
 
 # ORM
 
@@ -402,3 +403,17 @@ session.getTransaction().commit();
 ```
 
 Como se puede ver, para poder hacer una inserción se puede utilizar el método persist. Funcionaría también el método save. La diferencia entre ámbos es como gestiona las relaciones entre las diferentes tablas si las hubiese. Esto lo veremos más adelante
+
+
+## Crear elementos - Selecciones
+
+Para poder hacer selecciones se puede realizar desde varios métodos. El primero de ellos es el método get 
+
+```java
+Alumno alumno = session.get(Alumno.class,6);
+```
+
+Éste método hace una busqueda por elemento asociada a una clave primaria concreta.
+
+Otro de los métodos que se puede utilizar es createNativeQuery. Este método es más genérico, ya que con el se pueden ejecutar querys como tal. En el caso que dicha query devuelva un resultado de datos, se puede asociad al método list() para obtener el conjunto de resultados objenidos en formato lista
+
